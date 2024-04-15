@@ -1,0 +1,48 @@
+SQL script for managing a stroke prediction dataset
+
+ Create a table
+CREATE TABLE stroke_prediction (
+    patient_id SERIAL PRIMARY KEY, -- SERIAL in PostgreSQL, IDENTITY in SQL Server
+    patient_name VARCHAR(255),
+    age INT,
+    gender VARCHAR(10),
+    hypertension INT,
+    heart_disease INT,
+    marital_status VARCHAR(50),
+    work_type VARCHAR(50),
+    residence_type VARCHAR(50),
+    avg_glucose_level FLOAT, -- REAL or FLOAT in SQL Server
+    bmi FLOAT, -- REAL or FLOAT in SQL Server
+    stroke_history INT
+);
+
+ Insert a sample record
+-- For a full dataset import, consider using COPY (PostgreSQL) or BULK INSERT (SQL Server)
+INSERT INTO stroke_prediction (patient_name, age, gender, hypertension, heart_disease, marital_status, work_type, residence_type, avg_glucose_level, bmi, stroke_history)
+VALUES ('John Doe', 45, 'Male', 0, 1, 'Married', 'Private', 'Urban', 123.45, 22.4, 1);
+
+ Querying with aliasing
+SELECT 
+    patient_id AS "ID",
+    patient_name AS "Name",
+    age AS "Age",
+    avg_glucose_level AS "Glucose Level",
+    stroke_history AS "Has Stroke History"
+FROM 
+    stroke_prediction
+WHERE 
+    stroke_history = 1;
+
+ Creating a view for easy access to stroke risk patients
+CREATE VIEW stroke_risk_patients AS
+SELECT 
+    patient_name AS "Patient",
+    age AS "Age",
+    avg_glucose_level AS "Glucose",
+    stroke_history AS "Stroke History"
+FROM 
+    stroke_prediction
+WHERE 
+    stroke_history = 1;
+
+
